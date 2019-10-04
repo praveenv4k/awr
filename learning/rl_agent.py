@@ -3,7 +3,8 @@ import copy
 import gym
 import numpy as np
 import os
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
+import tensorflow_probability as tfp
 import time
 
 import util.logger as logger
@@ -385,7 +386,8 @@ class RLAgent(abc.ABC):
                 logstd_tf = tf.broadcast_to(logstd_tf, tf.shape(mean_tf))
                 std_tf = tf.exp(logstd_tf)
 
-            a_pd_tf = tf.contrib.distributions.MultivariateNormalDiag(loc=mean_tf, scale_diag=std_tf)
+            # a_pd_tf = tf.contrib.distributions.MultivariateNormalDiag(loc=mean_tf, scale_diag=std_tf)
+            a_pd_tf = tfp.distributions.MultivariateNormalDiag(loc=mean_tf, scale_diag=std_tf)
 
         elif (isinstance(action_space, gym.spaces.Discrete)):
             output_size = self._env.action_space.n
@@ -398,7 +400,7 @@ class RLAgent(abc.ABC):
                                             kernel_initializer=kernel_init,
                                             bias_initializer=bias_init,
                                             activation=None)
-            a_pd_tf = tf.contrib.distributions.Categorical(logits=logits_tf)
+            a_pd_tf = tfp.distributions.Categorical(logits=logits_tf)
             
         else:
             assert False, "Unsupported action space: " + str(self._env.action_space)

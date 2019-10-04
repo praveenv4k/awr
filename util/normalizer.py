@@ -1,6 +1,6 @@
 import copy
 import numpy as np
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 
 from util.logger import Logger
 

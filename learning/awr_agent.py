@@ -1,6 +1,7 @@
 import gym
 import numpy as np
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
+import tensorflow as tf2
 
 import learning.rl_agent as rl_agent
 import util.net_util as net_util
@@ -205,7 +206,7 @@ class AWRAgent(rl_agent.RLAgent):
         out_size = 1
         h = net_util.build_fc_net(input_tfs=input_tfs, layers=self._critic_net_layers, reuse=reuse)
         norm_val_tf = tf.layers.dense(inputs=h, units=out_size, activation=None,
-                                kernel_initializer=tf.contrib.layers.xavier_initializer(),
+                                kernel_initializer=tf2.initializers.GlorotUniform(), # tf.contrib.layers.xavier_initializer(),
                                 reuse=reuse);
         norm_val_tf = tf.squeeze(norm_val_tf, axis=-1)
         return norm_val_tf

@@ -3,7 +3,7 @@ import gym
 import numpy as np
 import os
 import sys
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 
 import awr_configs
 import learning.awr_agent as awr_agent
@@ -32,7 +32,7 @@ def parse_args(args):
     return arg_parser
 
 def enable_gpus(gpu_str):
-    if (gpu_str is not ""):
+    if gpu_str is not "":
         os.environ["CUDA_VISIBLE_DEVICES"] = gpu_str
     return
 
@@ -44,7 +44,7 @@ def build_env(env_id):
 def build_agent(env):
     env_id = arg_parser.env
     agent_configs = {}
-    if (env_id in awr_configs.AWR_CONFIGS):
+    if env_id in awr_configs.AWR_CONFIGS:
         agent_configs = awr_configs.AWR_CONFIGS[env_id]
 
     graph = tf.Graph()
@@ -62,10 +62,10 @@ def main(args):
 
     agent = build_agent(env)
     agent.visualize = arg_parser.visualize
-    if (arg_parser.model_file is not ""):
+    if arg_parser.model_file is not "":
         agent.load_model(arg_parser.model_file)
 
-    if (arg_parser.train):
+    if arg_parser.train:
         agent.train(max_iter=arg_parser.max_iter,
                     test_episodes=arg_parser.test_episodes,
                     output_dir=arg_parser.output_dir,
